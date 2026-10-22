@@ -34,6 +34,12 @@ def check_newline(lines, current_line, current_index, counter):
 def escape_dollar(prefix):
     return re.sub(r'\$', r'\\$', prefix)
 
+def prev_nonempty_line(lines, current_index):
+    j = current_index - 1
+    while j >= 0 and not lines[j].strip():
+        j -= 1
+    return lines[j] if j >= 0 else ""
+
 def parse_opcode_types(current_line):
     tsplit_equal = current_line.split("=")
     # print(tsplit_equal[0].strip())
@@ -84,7 +90,7 @@ def parse_opcode_body(lines, returned_body, current_index):
     return body_par
 
 def format_types(types):
-    types = list(types)
+    types = sorted(types)
     if len(types) == 0:
         types = ""
     elif len(types) == 1:
@@ -113,7 +119,7 @@ def get_snippet(opnames, opcode_body, types):
         print("B: ", opcode_body_args)
         # temp_args.append(opcode_body_args[:matches[0]])
         for i, start_index  in enumerate(matches):
-            t = opcode_body_args[prev:start_index - 1].strip()
+            t = opcode_body_args[prev:start_index].strip()
             if t.endswith(","):
                 t = t[:-1]
             temp_args.append(t)
@@ -143,8 +149,8 @@ def generate_flags():
                 split_line = line.split(FLAG_ROW)
                 flag = split_line[1].strip()
                 if flag not in flags:
-                    flags[flag] = FLAG_TEMPLATE.copy()
-                    if flag != FLAG_NO_CS7:
+                    if flag not in FLAG_NO_CS7:
+                        flags[flag] = FLAG_TEMPLATE.copy()
                         flags[flag]["prefix"] = html.unescape(flag.strip())
                         body = flag.split(",")[0]
                         body = re.findall(BODY_MARK, body)
@@ -224,7 +230,7 @@ def main() -> None:
                             description = regex.sub("", description)
                         opcodes_dict[opnames]["description"] = escape_dollar(prefix=description)
                     if line.startswith(MODERN_FLAG):
-                        if i > 0 and lines[i - 1].strip().startswith(SYNTAX_FLAG):
+                        if prev_nonempty_line(lines, i).strip().startswith(SYNTAX_FLAG):
                             j = i + 1
                             condition = not lines[j].strip().startswith(ORC_NOSPACE_FLAG) and not lines[j].strip().startswith(ORC_SPACE_FLAG)
                             while j < len(lines) and condition:
@@ -261,7 +267,7 @@ def main() -> None:
                                 print(f"[WARNING] Wrong opcode prefix format {opnames, current_line, j, index}")
                             break
                     if line.strip().startswith(ORC_NOSPACE_FLAG) or line.strip().startswith(ORC_SPACE_FLAG):
-                        if i > 0 and lines[i - 1].strip().startswith(SYNTAX_FLAG):
+                        if prev_nonempty_line(lines, i).strip().startswith(SYNTAX_FLAG):
                             j = i
                             while j < len(lines) and not lines[j].strip().startswith(ORC_NOSPACE_FLAG) and not lines[j].strip().startswith(ORC_SPACE_FLAG):
                                 j += 1
