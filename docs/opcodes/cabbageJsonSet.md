@@ -15,16 +15,17 @@ This opcode returns a new JSON document with the value at a dot-notation path re
 
 ### Initialization
 
-- *json:S* – a string holding a valid JSON document
-- *path:S* – dot-notation path to set
-- *val:S/val:k* – the new value (string or number)
-- Returns the updated document as a string, or `""` on failure
+* *json:S* – a string holding a valid JSON document
+* *path:S* – dot-notation path to set
+* *val:S/val:k* – the new value (string or number)
+* Returns the updated document as a string, or `""` on failure
 
 ### Performance
 
-- Works at k-rate
+* Works at k-rate
 
 ## Examples
+
 ``` csound-orc
 instr 1
     doc:S = "{\"params\":{\"rate\":2.5}}"

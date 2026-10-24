@@ -14,15 +14,16 @@ This opcode reports the JSON type of the value at a dot-notation path, so the or
 
 ### Initialization
 
-- *json:S* – a string holding a valid JSON document
-- *path:S* – dot-notation path into the document, where numeric segments index arrays
-- *type:S* – one of `"string"`, `"number"`, `"boolean"`, `"array"`, `"object"`, `"null"`, or `"missing"` (invalid documents report `"missing"` for every path)
+* *json:S* – a string holding a valid JSON document
+* *path:S* – dot-notation path into the document, where numeric segments index arrays
+* *type:S* – one of `"string"`, `"number"`, `"boolean"`, `"array"`, `"object"`, `"null"`, or `"missing"` (invalid documents report `"missing"` for every path)
 
 ### Performance
 
-- Works at k-rate; the document is re-parsed only when the input text changes
+* Works at k-rate; the document is re-parsed only when the input text changes
 
 ## Examples
+
 ``` csound-orc
 instr 1
     doc:S = "{\"freq\":\"440\"}"

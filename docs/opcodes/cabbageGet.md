@@ -19,16 +19,16 @@ This opcode queries the current value of a widget property, i.e,`colour`, `bound
 
 ### Initialization
 
-- *SChannel* – the name of the channel to query
-- *SProperty* - the property you wish to access. If the property is part of a JSON object, such as `"bounds:{"left":0}` you can use dot notation, i.e., “bounds.left”
-- *iValue* - the current value of the widget at init-time
+* *SChannel* – the name of the channel to query
+* *SProperty* - the property you wish to access. If the property is part of a JSON object, such as `"bounds:{"left":0}` you can use dot notation, i.e., "bounds.left"
+* *iValue* - the current value of the widget at init-time
 
 ### Performance
 
-- *kValue* - the current value of the widget property
-- *SValue* - the current string value of the widget property
-- *kTrig* - a trigger signal that will return 1 for a single k-cycle whenever the value has been updated/changed
-- *res:CabbageStrTrig* - `res.val` mirrors *SValue* and `res.trig` mirrors *kTrig*. k-rate only; the trigger fires when the property value changes.
+* *kValue* - the current value of the widget property
+* *SValue* - the current string value of the widget property
+* *kTrig* - a trigger signal that will return 1 for a single k-cycle whenever the value has been updated/changed
+* *res:CabbageStrTrig* - `res.val` mirrors *SValue* and `res.trig` mirrors *kTrig*. k-rate only; the trigger fires when the property value changes.
 
 ## Examples
 

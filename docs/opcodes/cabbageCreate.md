@@ -14,7 +14,7 @@ This opcode will create a new widget based on a JSON object. Note that widgets g
 
 ### Initialization
 
-- *SJson* – a well-formed JSON string. This will typically look like a JSON object from the Cabbage section JSON array.
+* *SJson* – a well-formed JSON string. This will typically look like a JSON object from the Cabbage section JSON array.
 
 > **Note**
 >

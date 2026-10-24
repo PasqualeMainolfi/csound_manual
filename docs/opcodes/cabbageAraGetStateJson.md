@@ -72,6 +72,7 @@ The **k-rate** version takes a trigger signal and returns a fresh JSON string ea
 ```
 
 ## Examples
+
 ``` csound-orc
 ; Get JSON once at init
 instr 1
@@ -96,6 +97,7 @@ endin
 ```
 
 ## See also
+
 - [cabbageAraDump](../opcodes/cabbageAraDump.md)
 - [cabbageAraGet](../opcodes/cabbageAraGet.md)
 - [cabbageAraGetUpdate](../opcodes/cabbageAraGetUpdate.md)

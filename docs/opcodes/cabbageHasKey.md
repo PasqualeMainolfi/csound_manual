@@ -15,13 +15,13 @@ This opcode checks whether a named widget has a given property key. It supports 
 
 ### Initialization
 
-- *SChannel* – the name of the widget channel to query
-- *SProperty* – the property key to check. Supports dot-notation for nested properties, e.g., `"bounds.left"`
-- *hasKey* – 1 if the property exists on the widget, 0 otherwise
+* *SChannel* – the name of the widget channel to query
+* *SProperty* – the property key to check. Supports dot-notation for nested properties, e.g., `"bounds.left"`
+* *hasKey* – 1 if the property exists on the widget, 0 otherwise
 
 ### Performance
 
-- *hasKey* – 1 if the property exists on the widget, 0 otherwise (evaluated each k-cycle)
+* *hasKey* – 1 if the property exists on the widget, 0 otherwise (evaluated each k-cycle)
 
 ## Examples
 

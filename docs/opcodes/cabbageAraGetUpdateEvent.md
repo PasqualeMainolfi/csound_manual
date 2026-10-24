@@ -15,9 +15,9 @@ Returns the type of the most recent ARA lifecycle event together with a trigger 
 
 ### Performance
 
-- *SEvent* — the name of the most recent ARA event as a string, for example `"audioSourceAddedToDocument"` or `"regionSequencePropertiesUpdated"` (k-rate)
-- *kTrig* — fires `1` for a single k-cycle whenever the shared ARA document model data has been refreshed; `0` otherwise
-- *res:CabbageStrTrig* — the [built-in trigger struct](https://cabbageaudio.com/docs/using/csound7/#built-in-trigger-structs) form: `res.val` holds *SEvent* and `res.trig` mirrors *kTrig*
+* *SEvent* — the name of the most recent ARA event as a string, for example `"audioSourceAddedToDocument"` or `"regionSequencePropertiesUpdated"` (k-rate)
+* *kTrig* — fires `1` for a single k-cycle whenever the shared ARA document model data has been refreshed; `0` otherwise
+* *res:CabbageStrTrig* — the [built-in trigger struct](https://cabbageaudio.com/docs/using/csound7/#built-in-trigger-structs) form: `res.val` holds *SEvent* and `res.trig` mirrors *kTrig*
 
 ## Description
 
@@ -35,6 +35,7 @@ The same information is available through `cabbageAraGet "lastEvent"`; this opco
 Only instruments running inside a host with ARA support see non-empty events. Outside an ARA session the string stays empty and the trigger never fires.
 
 ## Examples
+
 ``` csound-orc
 instr 1
   event:CabbageStrTrig = cabbageAraGetUpdateEvent()
@@ -52,6 +53,7 @@ endin
 ```
 
 ## See also
+
 - [cabbageAraGetUpdate](../opcodes/cabbageAraGetUpdate.md)
 - [cabbageAraGet](../opcodes/cabbageAraGet.md)
 - [cabbageAraDump](../opcodes/cabbageAraDump.md)

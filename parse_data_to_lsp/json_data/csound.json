@@ -917,7 +917,7 @@
     "cabbageJsonHas": {
         "prefix": "cabbageJsonHas(json:S, path:S)",
         "body": "cabbageJsonHas",
-        "description": "This opcode checks whether a dot-notation path exists in a JSON document (`nodes.0.params.rate`, where numeric segments index arrays). Unlike a query that returns an empty value, it distinguishes \u201cmissing\u201d from \u201cpresent but null/zero\u201d. See also [cabbageJsonType]."
+        "description": "This opcode checks whether a dot-notation path exists in a JSON document (`nodes.0.params.rate`, where numeric segments index arrays). Unlike a query that returns an empty value, it distinguishes \"missing\" from \"present but null/zero\". See also [cabbageJsonType]."
     },
     "pvstanal": {
         "prefix": "pvstanal(ktimescal, kamp, kpitch, ktab, [kdetect, kwrap, ioffset, ifftsize, ihop, idbthresh])",
@@ -1942,7 +1942,7 @@
     "cabbageGetWidgets": {
         "prefix": "cabbageGetWidgets()",
         "body": "cabbageGetWidgets",
-        "description": "Returns a string array containing the IDs of all widgets currently loaded in the instrument. This opcode works at i-time only. Each entry in the returned array corresponds to a widget\u2019s top-level `id` field, or falls back to `channels[0].id` if no top-level `id` is present. This opcodes runs at i-time only."
+        "description": "Returns a string array containing the IDs of all widgets currently loaded in the instrument. This opcode works at i-time only. Each entry in the returned array corresponds to a widget's top-level `id` field, or falls back to `channels[0].id` if no top-level `id` is present. This opcodes runs at i-time only."
     },
     "xout": {
         "prefix": "xout(xoutarg1 [, xoutarg2] ... [, xoutargN])",
@@ -2817,7 +2817,7 @@
     "cabbageLoadState": {
         "prefix": "cabbageLoadState(SFilePath)",
         "body": "cabbageLoadState",
-        "description": "This opcode loads widget values from a previously saved JSON state file created by the `cabbageSaveState` opcode. All matching widget channels will be updated with their saved values. Unlike Cabbage 2, all widget state is saved and restored, not only the current parameter values. This opcode works at i-time only. Therefore it\u2019s best used in an instrument that is called when you want to load state."
+        "description": "This opcode loads widget values from a previously saved JSON state file created by the `cabbageSaveState` opcode. All matching widget channels will be updated with their saved values. Unlike Cabbage 2, all widget state is saved and restored, not only the current parameter values. This opcode works at i-time only. Therefore it's best used in an instrument that is called when you want to load state."
     },
     "directory": {
         "prefix": "directory(SDirectory [, SExtention])",
@@ -3172,7 +3172,7 @@
     "cabbageCreateFileName": {
         "prefix": "cabbageCreateFileName(SDirectory, SExtension)",
         "body": "cabbageCreateFileName",
-        "description": "Generates a likely-unique filename in a target directory using the requested extension. This opcode is useful when you need a valid and unique filename for testing. The opcode returns a full path (forward slashes) but does not create the file on disk. This opcode is i-time only, so it\u2019s best used in a dedicated instrument that will generate the filename when needed."
+        "description": "Generates a likely-unique filename in a target directory using the requested extension. This opcode is useful when you need a valid and unique filename for testing. The opcode returns a full path (forward slashes) but does not create the file on disk. This opcode is i-time only, so it's best used in a dedicated instrument that will generate the filename when needed."
     },
     "rspline": {
         "prefix": "rspline({k, x}rangeMin, xrangeMax, kcpsMin, kcpsMax)",

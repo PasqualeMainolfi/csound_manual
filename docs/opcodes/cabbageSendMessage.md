@@ -13,7 +13,7 @@ The JSON message is sent as-is to the frontend, where it can be handled by custo
 
 - Sending arrays of data for custom visualizations
 - Triggering custom frontend behaviors
-- Sending complex data structures that don’t map to standard widget properties
+- Sending complex data structures that don't map to standard widget properties
 - Implementing custom communication protocols between Csound and your UI
 
 ## Syntax
@@ -26,12 +26,12 @@ The JSON message is sent as-is to the frontend, where it can be handled by custo
 
 ### Initialization
 
-- *SJsonString* – a valid JSON string (object or array) to send to the frontend
+* *SJsonString* – a valid JSON string (object or array) to send to the frontend
 
 ### Performance
 
-- *kTrigger* - a signal used to trigger sending the message (sends when trigger == 1)
-- *SJsonString* – a valid JSON string (object or array) to send to the frontend
+* *kTrigger* - a signal used to trigger sending the message (sends when trigger == 1)
+* *SJsonString* – a valid JSON string (object or array) to send to the frontend
 
 ## Important Notes
 
@@ -41,6 +41,7 @@ The JSON message is sent as-is to the frontend, where it can be handled by custo
 - Messages bypass the channel cache system and are sent directly to the UI queue.
 
 ## Examples
+
 ### Sending Custom Data Arrays
 
 Here is an example of the cabbageSendMessage opcode. It uses the file [cabbageSendMessage.csd](../examples/cabbageSendMessage.csd).
@@ -73,13 +74,13 @@ Cabbage.addMessageListener((message) => {
 
 ## Use Cases
 
-1.  **Real-time Data Visualization**: Send arrays of FFT data, waveform samples, or other analysis results for custom visualization.
+1. **Real-time Data Visualization**: Send arrays of FFT data, waveform samples, or other analysis results for custom visualization.
 
-2.  **State Synchronization**: Broadcast complex state changes that involve multiple related values.
+2. **State Synchronization**: Broadcast complex state changes that involve multiple related values.
 
-3.  **Event Notifications**: Trigger frontend animations, transitions, or other visual effects based on musical events.
+3. **Event Notifications**: Trigger frontend animations, transitions, or other visual effects based on musical events.
 
-4.  **Custom Protocols**: Implement domain-specific communication between Csound instruments and specialized UI components.
+4. **Custom Protocols**: Implement domain-specific communication between Csound instruments and specialized UI components.
 
 ## Credits
 

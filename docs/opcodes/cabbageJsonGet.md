@@ -20,20 +20,21 @@ This opcode queries a JSON document using dot-notation paths (`nodes.0.params.ra
 
 ### Initialization
 
-- *json:S* – a string holding a valid JSON document
-- *path:S* – dot-notation path into the document
-- *val:S* – strings come back verbatim; numbers, booleans, and containers come back as compact JSON; missing paths yield `""`
-- *val:i* – numbers direct; numeric strings parsed (`"42"` → `42`); booleans → `1`/`0`; anything else → `0`
-- *arr:S*, *arr:k* – per-element rules as above (i-time only); missing paths and non-arrays yield empty arrays
+* *json:S* – a string holding a valid JSON document
+* *path:S* – dot-notation path into the document
+* *val:S* – strings come back verbatim; numbers, booleans, and containers come back as compact JSON; missing paths yield `""`
+* *val:i* – numbers direct; numeric strings parsed (`"42"` → `42`); booleans → `1`/`0`; anything else → `0`
+* *arr:S[]*, *arr:k[]* – per-element rules as above (i-time only); missing paths and non-arrays yield empty arrays
 
 ### Performance
 
-- *val:k* – as *val:i*, re-evaluated each k-cycle (the document is re-parsed only when the input text changes)
-- *val:S* – as i-time; the document is re-parsed only when the input text changes
-- *trig:k* – fires `1` for a single k-cycle whenever the result string changes
-- *res:CabbageStrTrig* – the [built-in trigger struct](https://cabbageaudio.com/docs/using/csound7/#built-in-trigger-structs) form: `res.val` mirrors *val:S* and `res.trig` fires `1` for a single k-cycle whenever the result string changes. k-rate only.
+* *val:k* – as *val:i*, re-evaluated each k-cycle (the document is re-parsed only when the input text changes)
+* *val:S* – as i-time; the document is re-parsed only when the input text changes
+* *trig:k* – fires `1` for a single k-cycle whenever the result string changes
+* *res:CabbageStrTrig* – the [built-in trigger struct](https://cabbageaudio.com/docs/using/csound7/#built-in-trigger-structs) form: `res.val` mirrors *val:S* and `res.trig` fires `1` for a single k-cycle whenever the result string changes. k-rate only.
 
 ## Examples
+
 ``` csound-orc
 instr 1
     doc:S = "{\"nodes\":[{\"id\":\"n1\",\"params\":{\"freq\":440}}]}"

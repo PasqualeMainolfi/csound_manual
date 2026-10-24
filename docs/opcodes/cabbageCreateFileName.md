@@ -3,7 +3,7 @@ id:cabbageCreateFileName
 category:Cabbage:Files and State
 -->
 # cabbageCreateFileName
-Generates a likely-unique filename in a target directory using the requested extension. This opcode is useful when you need a valid and unique filename for testing. The opcode returns a full path (forward slashes) but does not create the file on disk. This opcode is i-time only, so it’s best used in a dedicated instrument that will generate the filename when needed.
+Generates a likely-unique filename in a target directory using the requested extension. This opcode is useful when you need a valid and unique filename for testing. The opcode returns a full path (forward slashes) but does not create the file on disk. This opcode is i-time only, so it's best used in a dedicated instrument that will generate the filename when needed.
 
 ## Syntax
 
@@ -20,6 +20,7 @@ Generates a likely-unique filename in a target directory using the requested ext
 The opcode returns a single string containing a full path that is intended not to collide with existing files in `directory`.
 
 ## Examples
+
 ``` csound-orc
 ksmps = 32
 nchnls = 2

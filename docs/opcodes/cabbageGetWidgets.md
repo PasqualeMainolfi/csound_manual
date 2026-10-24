@@ -3,7 +3,7 @@ id:cabbageGetWidgets
 category:Cabbage:Widgets
 -->
 # cabbageGetWidgets
-Returns a string array containing the IDs of all widgets currently loaded in the instrument. This opcode works at i-time only. Each entry in the returned array corresponds to a widget’s top-level `id` field, or falls back to `channels[0].id` if no top-level `id` is present. This opcodes runs at i-time only.
+Returns a string array containing the IDs of all widgets currently loaded in the instrument. This opcode works at i-time only. Each entry in the returned array corresponds to a widget's top-level `id` field, or falls back to `channels[0].id` if no top-level `id` is present. This opcodes runs at i-time only.
 
 ## Syntax
 

@@ -15,15 +15,16 @@ This opcode returns the size of the value at a dot-notation path in a JSON docum
 
 ### Initialization
 
-- *json:S* – a string holding a valid JSON document
-- *path:S* – dot-notation path into the document (`nodes.0.params`, where numeric segments index arrays)
-- *len:i* – number of elements/keys, or `0`
+* *json:S* – a string holding a valid JSON document
+* *path:S* – dot-notation path into the document (`nodes.0.params`, where numeric segments index arrays)
+* *len:i* – number of elements/keys, or `0`
 
 ### Performance
 
-- *len:k* – as *len:i*, re-evaluated each k-cycle
+* *len:k* – as *len:i*, re-evaluated each k-cycle
 
 ## Examples
+
 ``` csound-orc
 instr 1
     doc:S = "{\"gains\":[1, 2.5, 3]}"

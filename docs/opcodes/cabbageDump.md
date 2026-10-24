@@ -15,12 +15,12 @@ This opcode will print the JSON representation of a widget to the Csound console
 
 ### Initialization
 
-- *SChannel* – the name of the channel to query
-- *iIndent* - If *iIndent* is nonnegative, then array elements and object members will be pretty-printed with that indent level. An indent level of 0 will only insert newlines. -1 selects the most compact representation. The default level is 4.
+* *SChannel* – the name of the channel to query
+* *iIndent* - If *iIndent* is nonnegative, then array elements and object members will be pretty-printed with that indent level. An indent level of 0 will only insert newlines. -1 selects the most compact representation. The default level is 4.
 
 ### Performance
 
-- *kTrig* - a trigger signal that will cause the widget’s JSON representation to be printed to the console.
+* *kTrig* - a trigger signal that will cause the widget's JSON representation to be printed to the console.
 
 ## Examples
 

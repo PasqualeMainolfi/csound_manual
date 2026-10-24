@@ -15,14 +15,15 @@ This opcode saves the current state of all widget values to a JSON file. The sav
 
 ### Initialization
 
-- *SFilePath* – the absolute file path where the state will be saved (e.g., “/Users/username/Documents/mypreset.json” or “C:\Users\username\Documents\mypreset.json”). The file will be created if it doesn’t exist, or overwritten if it does. Relative paths are not supported.
-- *SWidgetIds\[\]* – (optional) a string array of widget IDs that should be saved with their full JSON (all properties). All other widgets are still saved, but with channel data only (id and channel values). If omitted, all widgets are saved with channel data only.
+* *SFilePath* – the absolute file path where the state will be saved (e.g., "/Users/username/Documents/mypreset.json" or "C:\\Users\\username\\Documents\\mypreset.json"). The file will be created if it doesn't exist, or overwritten if it does. Relative paths are not supported.
+* *SWidgetIds[]* – (optional) a string array of widget IDs that should be saved with their full JSON (all properties). All other widgets are still saved, but with channel data only (id and channel values). If omitted, all widgets are saved with channel data only.
 
 > **Note**
 >
-> The saved JSON file contains all current widget channel values and can be edited manually if needed. To save multiple presets, use Csound’s string formatting to dynamically generate unique filenames, for example: `sprintf("/path/to/presets/preset_%d.json", iPresetNumber)`
+> The saved JSON file contains all current widget channel values and can be edited manually if needed. To save multiple presets, use Csound's string formatting to dynamically generate unique filenames, for example: `sprintf("/path/to/presets/preset_%d.json", iPresetNumber)`
 
 ## Examples
+
 ``` csound-orc
 instr SaveState
     filename:S = sprintf("%s/myPreset.json", chnget:S("CSD_PATH"))
@@ -43,6 +44,7 @@ Here is an example of the cabbageSaveState opcode. It uses the file [cabbageStat
 [Download cabbageState.csd](https://cabbageaudio.com/examples/cabbageState.csd)
 
 ## See also
+
 - [cabbageLoadState](../opcodes/cabbageLoadState.md)
 - [Saving and Loading State](https://cabbageaudio.com/docs/using/saving-and-loading-state/)
 

@@ -20,7 +20,7 @@ Prints a formatted dump of the entire ARA data pool to the Csound output. Useful
 **Parameters:**
 
 | Parameter | Description |
-|----|----|
+|-----------|-------------|
 | `kTrig` | Trigger signal. Dumps when transitions from zero to nonzero (k-rate only). |
 
 The **i-rate** version dumps once when the instrument initializes.
@@ -40,6 +40,7 @@ The output includes:
 - **Sources**: All audio sources with channels, sample rate, duration, and region crop
 
 ## Examples
+
 ``` csound-orc
 ; Dump once at init
 instr 1
@@ -269,6 +270,7 @@ endin
 ```
 
 ## See also
+
 - [cabbageAraGet](../opcodes/cabbageAraGet.md)
 - [cabbageAraGetUpdate](../opcodes/cabbageAraGetUpdate.md)
 

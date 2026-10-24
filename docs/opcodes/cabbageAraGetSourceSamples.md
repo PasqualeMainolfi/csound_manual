@@ -17,19 +17,19 @@ Reads PCM audio data from an ARA source. Available in four variants: a-rate (aud
 
 ### Initialization
 
-- *iChan* — zero-based channel index within the source
-- *iSourceIndex* — zero-based source index (obtain from `cabbageAraGet "currentIndex"`)
-- *iStart* — first sample to read (array variants)
-- *iCount* — number of samples to read (array variants)
+* *iChan* — zero-based channel index within the source
+* *iSourceIndex* — zero-based source index (obtain from `cabbageAraGet "currentIndex"`)
+* *iStart* — first sample to read (array variants)
+* *iCount* — number of samples to read (array variants)
 
 ### Performance
 
-- *aPos* / *kPos* — sample position to read at (per-sample or per-k-cycle)
-- *aOut* / *kOut* — output sample value at the given position
+* *aPos* / *kPos* — sample position to read at (per-sample or per-k-cycle)
+* *aOut* / *kOut* — output sample value at the given position
 
 ### Output arrays
 
-- *kSamples\[\]* / *iSamples\[\]* — array of PCM samples from `iStart` to `iStart + iCount - 1`
+* *kSamples[]* / *iSamples[]* — array of PCM samples from `iStart` to `iStart + iCount - 1`
 
 ## Description
 
@@ -38,6 +38,7 @@ This opcode provides direct access to the raw PCM audio data of an ARA source. T
 Sample positions outside the valid range return 0. Prints warnings if the source index, channel index, or PCM data are invalid.
 
 ## Examples
+
 ``` csound-orc
 instr 1
   index:i = cabbageAraGet("currentIndex")
@@ -52,6 +53,7 @@ endin
 ```
 
 ## See also
+
 - [cabbageAraGet](../opcodes/cabbageAraGet.md)
 - [cabbageAraGetUpdate](../opcodes/cabbageAraGetUpdate.md)
 

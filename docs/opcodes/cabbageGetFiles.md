@@ -20,6 +20,7 @@ Returns a list of files in a directory optionally filtered by extension. Useful 
 The opcode returns an array of strings containing absolute file paths (forward-slash separators) matching the filter.
 
 ## Examples
+
 ``` csound-orc
 ksmps = 32
 nchnls = 2

@@ -20,16 +20,16 @@ This opcode queries the current value of a widget. It can run at init-time or k-
 
 ### Initialization
 
-- *SChannel* – the name of the channel to query
-- *iValue* - the current value of the widget at i-time
+* *SChannel* – the name of the channel to query
+* *iValue* - the current value of the widget at i-time
 
 ### Performance
 
-- *kValue* - the current value of the widget at k-time
-- *SValue* - the current value of the widget at i/k-time. The trigger version of `cabbageGetValue` for strings works at k-rate, the non trigger version is i-time only.
-- *kTrig* - a trigger signal that will return 1 for a single k-cycle whenever the value has been updated/changed
-- *res:CabbageNumTrig* - numeric channels. `res.val` mirrors *kValue* and `res.trig` mirrors *kTrig*. Runs at init-time and k-time.
-- *res:CabbageStrTrig* - string channels. `res.val` holds the latest string and `res.trig` fires 1 for a single k-cycle whenever the string changes. k-rate only; on the first pass the trigger is primed to 0, so only subsequent changes fire.
+* *kValue* - the current value of the widget at k-time
+* *SValue* - the current value of the widget at i/k-time. The trigger version of `cabbageGetValue` for strings works at k-rate, the non trigger version is i-time only.
+* *kTrig* - a trigger signal that will return 1 for a single k-cycle whenever the value has been updated/changed
+* *res:CabbageNumTrig* - numeric channels. `res.val` mirrors *kValue* and `res.trig` mirrors *kTrig*. Runs at init-time and k-time.
+* *res:CabbageStrTrig* - string channels. `res.val` holds the latest string and `res.trig` fires 1 for a single k-cycle whenever the string changes. k-rate only; on the first pass the trigger is primed to 0, so only subsequent changes fire.
 
 ## Examples
 

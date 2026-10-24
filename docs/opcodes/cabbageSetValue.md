@@ -11,19 +11,19 @@ Because the frontend operates at a much lower frame rate than the audio thread, 
 
 === "Modern"
     ``` csound-orc
-    cabbageSetValue:k(SChannel, kValue [, kTrigger])
-    cabbageSetValue:i(SChannel, iValue)
+    cabbageSetValue:k(SChannel, kValue [, kTrigger]) 
+    cabbageSetValue:i(SChannel, iValue) 
     ```
 
 ### Initialization
 
-- *SChannel* – the name of the channel to query
-- *iValue* - the value to set the widget to
+* *SChannel* – the name of the channel to query
+* *iValue* - the value to set the widget to
 
 ### Performance
 
-- *kValue* - the value to set the widget to
-- *kTrigger* - a signal used to trigger a value update
+* *kValue* - the value to set the widget to
+* *kTrigger* - a signal used to trigger a value update
 
 ## Examples
 

@@ -17,12 +17,12 @@ Returns metadata about ARA audio sources, region information, and plugin state f
 
 ### Initialization
 
-- *SProperty* — property name using dot notation (e.g., `"audioSource.name"`)
-- *iIndex* — zero-based index for array properties (source index, selection index, or playback region index)
+* *SProperty* — property name using dot notation (e.g., `"audioSource.name"`)
+* *iIndex* — zero-based index for array properties (source index, selection index, or playback region index)
 
 ## Description
 
-`cabbageAraGet` is the primary opcode for querying ARA session data. It reads from a thread-safe JSON store that is updated automatically whenever the host’s document model changes. All values are returned at i-rate (init pass only).
+`cabbageAraGet` is the primary opcode for querying ARA session data. It reads from a thread-safe JSON store that is updated automatically whenever the host's document model changes. All values are returned at i-rate (init pass only).
 
 Property names use dot notation to express the data hierarchy. For example, `audioSource.region.start` queries the crop start position of the audio source. The index argument selects which item to query — the meaning depends on the property prefix (source index, selection index, or playback region index).
 
@@ -30,9 +30,9 @@ Property names use dot notation to express the data hierarchy. For example, `aud
 
 ARA properties use two time domains, and the naming convention reflects this:
 
-- **Source-relative properties** (crop position within the audio file) are available in both **seconds** and **samples** at the source’s sample rate. Properties ending in `InSamples` are in samples; without the suffix, they’re in seconds. For example, `audioSource.region.start` is in seconds, while `audioSource.region.startInSamples` is in samples.
+- **Source-relative properties** (crop position within the audio file) are available in both **seconds** and **samples** at the source's sample rate. Properties ending in `InSamples` are in samples; without the suffix, they're in seconds. For example, `audioSource.region.start` is in seconds, while `audioSource.region.startInSamples` is in samples.
 
-- **Arrangement properties** (where a clip sits on the host timeline) are given in **seconds**. These have no `InSamples` variant because the host’s playback position is based on the host SR, which can change, whereas the time the clip appears will be the same regardless of the SR. For example, `playbackRegion.start` and `editorView.selectedPlayback.start`.
+- **Arrangement properties** (where a clip sits on the host timeline) are given in **seconds**. These have no `InSamples` variant because the host's playback position is based on the host SR, which can change, whereas the time the clip appears will be the same regardless of the SR. For example, `playbackRegion.start` and `editorView.selectedPlayback.start`.
 
 This follows the ARA API design: source file time is based in samples; arrangement time is not.
 
@@ -41,7 +41,7 @@ This follows the ARA API design: source file time is based in samples; arrangeme
 These are queried without an index:
 
 | Property | Type | Description |
-|----|----|----|
+|---|---|---|
 | `"currentIndex"` | number | Index of the audio source associated with this plugin instance |
 | `"update"` | number | Counter that increments on each ARA model change |
 | `"lastEvent"` | string | Name of the most recent ARA lifecycle callback (see table below) |
@@ -57,7 +57,7 @@ These are queried without an index:
 These query properties of the audio source file itself. Use the source pool index (the index of the audio source within the document):
 
 | Property | Type | Index | Description |
-|----|----|----|----|
+|---|---|---|---|
 | `"audioSource.name"` | string | source idx | File name or display name of the audio source |
 | `"audioSource.channels"` | number | source idx | Number of audio channels (1 = mono, 2 = stereo) |
 | `"audioSource.sampleCount"` | number | source idx | Total number of audio samples in the source file |
@@ -69,7 +69,7 @@ These query properties of the audio source file itself. Use the source pool inde
 These query the crop/edit state of a source within its audio modification. The values represent the position and duration of the audio source as cropped by the host. Use the source pool index:
 
 | Property | Type | Index | Description |
-|----|----|----|----|
+|---|---|---|---|
 | `"audioSource.region.start"` | number | source idx | Crop start position in seconds |
 | `"audioSource.region.startInSamples"` | number | source idx | Crop start position in samples (within the source file) |
 | `"audioSource.region.duration"` | number | source idx | Crop duration in seconds |
@@ -88,7 +88,7 @@ These query the current host selection and visibility state.
 These are queried without an index:
 
 | Property | Type | Description |
-|----|----|----|
+|---|---|---|
 | `"editorView.timeRange.start"` | number | Start of the overall selection on the host arrangement timeline (seconds) |
 | `"editorView.timeRange.duration"` | number | Duration of the overall selection on the host arrangement timeline (seconds) |
 | `"editorView.hiddenSequenceCount"` | number | Number of hidden region sequences (tracks) |
@@ -98,7 +98,7 @@ These are queried without an index:
 These query individual selected playback regions (clips on the timeline). Use a selection index (not the source pool index):
 
 | Property | Type | Index | Description |
-|----|----|----|----|
+|---|---|---|---|
 | `"editorView.selectedRegion.name"` | string | selection idx | Name of the selected playback region at index |
 | `"editorView.selectedRegion.startInSamples"` | number | selection idx | Start position in samples (modification time) |
 | `"editorView.selectedRegion.duration"` | number | selection idx | Duration in seconds |
@@ -115,7 +115,7 @@ These query individual selected playback regions (clips on the timeline). Use a 
 A musical context describes the rhythmic and harmonic structure of the music. Each document can contain multiple musical contexts. Use the musical context index:
 
 | Property | Type | Index | Description |
-|----|----|----|----|
+|---|---|---|---|
 | `"musicalContextCount"` | number | none | Total number of musical contexts in the document |
 | `"musicalContext.name"` | string | mc idx | Display name of the musical context (may be empty) |
 | `"musicalContext.orderIndex"` | number | mc idx | Sort order index within the document |
@@ -132,7 +132,7 @@ A musical context describes the rhythmic and harmonic structure of the music. Ea
 A region sequence represents a track or lane in the host, containing playback regions. Each region sequence belongs to a musical context. Use the region sequence index:
 
 | Property | Type | Index | Description |
-|----|----|----|----|
+|---|---|---|---|
 | `"regionSequenceCount"` | number | none | Total number of region sequences (tracks) in the document |
 | `"regionSequence.name"` | string | rs idx | Display name of the region sequence (may be empty) |
 | `"regionSequence.orderIndex"` | number | rs idx | Sort order index within its musical context |
@@ -150,7 +150,7 @@ A region sequence represents a track or lane in the host, containing playback re
 An audio modification represents a set of edits applied to an audio source. Each modification belongs to an audio source and can contain multiple playback regions. Use the modification index:
 
 | Property | Type | Index | Description |
-|----|----|----|----|
+|---|---|---|---|
 | `"audioModificationCount"` | number | none | Total number of audio modifications in the document |
 | `"audioModification.name"` | string | mod idx | Display name of the modification (may be empty) |
 | `"audioModification.persistentId"` | string | mod idx | Persistent ID used for archiving/restoring state |
@@ -160,14 +160,14 @@ An audio modification represents a set of edits applied to an audio source. Each
 These query all playback regions (clips) in the document, not just the selected ones. Use the playback region index (0-based, in the order they were added to the document):
 
 | Property | Type | Index | Description |
-|----|----|----|----|
+|---|---|---|---|
 | `"playbackRegion.name"` | string | pr idx | Source file name for this playback region |
 | `"playbackRegion.sequenceName"` | string | pr idx | Track/lane name this playback region belongs to |
 | `"playbackRegion.startInSamples"` | number | pr idx | Crop start position in samples (within the source) |
 | `"playbackRegion.durationInSamples"` | number | pr idx | Crop duration in samples |
 | `"playbackRegion.start"` | number | pr idx | Arrangement position on the host timeline (seconds) |
 | `"playbackRegion.duration"` | number | pr idx | Duration on the host arrangement timeline (seconds) |
-| `"playbackRegion.sourceIndex"` | number | pr idx | Source pool index for this playback region’s source |
+| `"playbackRegion.sourceIndex"` | number | pr idx | Source pool index for this playback region's source |
 | `"playbackRegion.color.r"` | number | pr idx | Red channel (0.0–1.0) |
 | `"playbackRegion.color.g"` | number | pr idx | Green channel (0.0–1.0) |
 | `"playbackRegion.color.b"` | number | pr idx | Blue channel (0.0–1.0) |
@@ -177,6 +177,7 @@ These query all playback regions (clips) in the document, not just the selected 
 > Playback region index is separate from source pool index and selection index. The playback region array is updated via ARA lifecycle callbacks (`playbackRegionAddedToRegionSequence`, `playbackRegionRemovedFromRegionSequence`, `playbackRegionPropertiesUpdated`, `playbackRegionWillDestroy`).
 
 ## Examples
+
 ### Basic source info
 
 ``` csound-orc
@@ -342,13 +343,14 @@ endin
 
 - All values are i-rate: call during `init` or inside an i-rate instrument triggered by `cabbageAraGetUpdate`.
 - The JSON store is updated on a background thread when the host modifies the document. Use `cabbageAraGetUpdate` as a trigger to know when to re-read values.
-- String values are allocated once at init and remain valid for the instrument’s lifetime.
+- String values are allocated once at init and remain valid for the instrument's lifetime.
 
 ## See also
+
 - [cabbageAraGetUpdate](../opcodes/cabbageAraGetUpdate.md)
 - [cabbageAraGetSourceSamples](../opcodes/cabbageAraGetSourceSamples.md)
 
-------------------------------------------------------------------------
+---
 
 ## Appendix: ARA Callback Event Types
 
@@ -356,27 +358,27 @@ The `"lastEvent"` top-level property returns one of the following strings, indic
 
 ### Editing Cycle
 
-| Event            | Description                  |
-|------------------|------------------------------|
+| Event | Description |
+|---|---|
 | `"beginEditing"` | Host started an edit gesture |
-| `"endEditing"`   | Host ended an edit gesture   |
+| `"endEditing"` | Host ended an edit gesture |
 
 ### Document Graph Changes
 
-| Event                                 | Description                       |
-|---------------------------------------|-----------------------------------|
-| `"musicalContextAddedToDocument"`     | New musical context added         |
-| `"musicalContextRemovedFromDocument"` | Musical context removed           |
-| `"regionSequenceAddedToDocument"`     | New region sequence (track) added |
-| `"regionSequenceRemovedFromDocument"` | Region sequence removed           |
-| `"audioSourceAddedToDocument"`        | New audio source added            |
-| `"audioSourceRemovedFromDocument"`    | Audio source removed              |
-| `"documentWillDestroy"`               | Document is about to be destroyed |
+| Event | Description |
+|---|---|
+| `"musicalContextAddedToDocument"` | New musical context added |
+| `"musicalContextRemovedFromDocument"` | Musical context removed |
+| `"regionSequenceAddedToDocument"` | New region sequence (track) added |
+| `"regionSequenceRemovedFromDocument"` | Region sequence removed |
+| `"audioSourceAddedToDocument"` | New audio source added |
+| `"audioSourceRemovedFromDocument"` | Audio source removed |
+| `"documentWillDestroy"` | Document is about to be destroyed |
 
 ### Document Property Updates
 
 | Event | Description |
-|----|----|
+|---|---|
 | `"documentPropertiesUpdated"` | Document properties changed (did) |
 | `"documentPropertiesWillUpdate"` | Document properties about to change (will) |
 | `"musicalContextPropertiesUpdated"` | Musical context properties changed |
@@ -392,7 +394,7 @@ The `"lastEvent"` top-level property returns one of the following strings, indic
 ### Region Sequence Lifecycle
 
 | Event | Description |
-|----|----|
+|---|---|
 | `"regionSequenceAddedToMusicalContext"` | Region sequence added to a musical context |
 | `"regionSequenceRemovedFromMusicalContext"` | Region sequence removed from a musical context |
 | `"musicalContextWillDestroy"` | Musical context about to be destroyed |
@@ -401,7 +403,7 @@ The `"lastEvent"` top-level property returns one of the following strings, indic
 ### Audio Source/Modification Lifecycle
 
 | Event | Description |
-|----|----|
+|---|---|
 | `"audioSourceWillDestroy"` | Audio source about to be destroyed |
 | `"audioModificationAddedToAudioSource"` | New modification added to a source |
 | `"audioModificationRemovedFromAudioSource"` | Modification removed from a source |
@@ -414,7 +416,7 @@ The `"lastEvent"` top-level property returns one of the following strings, indic
 ### Playback Region Lifecycle
 
 | Event | Description |
-|----|----|
+|---|---|
 | `"playbackRegionAddedToRegionSequence"` | Playback region added to a region sequence |
 | `"playbackRegionRemovedFromRegionSequence"` | Playback region removed from a region sequence |
 | `"playbackRegionAddedToAudioModification"` | Playback region added to a modification |
@@ -424,7 +426,7 @@ The `"lastEvent"` top-level property returns one of the following strings, indic
 ### EditorView
 
 | Event | Description |
-|----|----|
+|---|---|
 | `"notifySelection"` | Host sent a new selection (user selected regions/tracks) |
 | `"notifyHideRegionSequences"` | Host updated hidden/shown tracks |
 

@@ -14,7 +14,7 @@ Returns a trigger that is `1` for a single k-cycle whenever ARA model data chang
 
 ### Performance
 
-- *kTrig* — fires `1` for a single k-cycle whenever the shared ARA document model data has been refreshed (k-rate only)
+* *kTrig* — fires `1` for a single k-cycle whenever the shared ARA document model data has been refreshed (k-rate only)
 
 ## Description
 
@@ -23,6 +23,7 @@ Each time the shared ARA document model data is refreshed by the host, this opco
 If you also need to know *what kind of event* fired (for example `"audioSourceAdded"` or `"regionChanged"`), use [cabbageAraGetUpdateEvent](../opcodes/cabbageAraGetUpdateEvent.md), which returns the event type alongside the same trigger.
 
 ## Examples
+
 ``` csound-orc
 instr 1
   trig:k = cabbageAraGetUpdate()
@@ -39,6 +40,7 @@ endin
 ```
 
 ## See also
+
 - [cabbageAraGetUpdateEvent](../opcodes/cabbageAraGetUpdateEvent.md)
 - [cabbageAraGet](../opcodes/cabbageAraGet.md)
 - [cabbageAraGetSourceSamples](../opcodes/cabbageAraGetSourceSamples.md)

@@ -3,7 +3,7 @@ id:cabbageJsonHas
 category:Cabbage:JSON
 -->
 # cabbageJsonHas
-This opcode checks whether a dot-notation path exists in a JSON document (`nodes.0.params.rate`, where numeric segments index arrays). Unlike a query that returns an empty value, it distinguishes “missing” from “present but null/zero”. See also [cabbageJsonType](../opcodes/cabbageJsonType.md) and [cabbageJsonGet](../opcodes/cabbageJsonGet.md).
+This opcode checks whether a dot-notation path exists in a JSON document (`nodes.0.params.rate`, where numeric segments index arrays). Unlike a query that returns an empty value, it distinguishes "missing" from "present but null/zero". See also [cabbageJsonType](../opcodes/cabbageJsonType.md) and [cabbageJsonGet](../opcodes/cabbageJsonGet.md).
 
 ## Syntax
 
@@ -15,15 +15,16 @@ This opcode checks whether a dot-notation path exists in a JSON document (`nodes
 
 ### Initialization
 
-- *json:S* – a string holding a valid JSON document
-- *path:S* – dot-notation path into the document
-- *has:i* – `1` when the path exists (even if its value is `null`), else `0`
+* *json:S* – a string holding a valid JSON document
+* *path:S* – dot-notation path into the document
+* *has:i* – `1` when the path exists (even if its value is `null`), else `0`
 
 ### Performance
 
-- *has:k* – as *has:i*, re-evaluated each k-cycle
+* *has:k* – as *has:i*, re-evaluated each k-cycle
 
 ## Examples
+
 ``` csound-orc
 instr 1
     doc:S = "{\"params\":{\"rate\":2.5}}"
