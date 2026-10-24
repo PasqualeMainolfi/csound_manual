@@ -103,6 +103,7 @@
             - [Initialization and Reinitialization](control/reinitn.md)
             - [Sensing and Control](control/sensing.md)
             - [Stacks](control/stacks.md)
+            - [State Machine Graphs](control/stm.md)
             - [Sub-instrument Control](control/subinstr.md)
             - [Time Reading](control/timeread.md)
         - Function Table Control
@@ -164,6 +165,7 @@
             - [Bela Digital I/O](oscnetwork/bela.md)
         - Plugin Hosting
             - [DSSI and LADSPA](plugin/dssi4cs.md)
+        - [Cabbage](cabbage/cabbage.md)
         - Miscellaneous Opcodes
             - [Overview](miscopcodes.md)
             - [Testing](misc/testing.md)

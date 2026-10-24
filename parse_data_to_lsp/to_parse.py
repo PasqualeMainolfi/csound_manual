@@ -6,6 +6,8 @@ import html
 PATH_TO_OPCODES_ROOT: str = "../docs/opcodes"
 PATH_TO_FLAGS_ROOT: str = "../docs/invoke/cs-options-alphabetically.md"
 TEMPLATE_OPCODE_ADDRESS = "https://csound.com/manual/opcodes/"
+TEMPLATE_CABBAGE_OPCODE_ADDRESS = "https://cabbageaudio.com/docs/opcodes/"
+CABBAGE_CATEGORY_FLAG = "category:Cabbage"
 
 TEMPLATE = {
     "prefix": "",
@@ -24,6 +26,7 @@ regex_new = re.compile(r'[A-Za-z0-9_\[\]]+:[A-Za-z0-9_\[\]]+')
 regex_c = re.compile(r'[A-Za-z0-9_\[\]]\([A-Za-z0-9_\[\]:,\{\}]+\)')
 regex_d = re.compile(r'\([A-Za-z0-9_]\)')
 regex_e = re.compile(r'\[[^\[\]]*=[^\[\]]*\]')
+regex_typed = re.compile(r'[A-Za-z0-9_\[\]]+:[A-Za-z0-9_\[\]{*]')
 
 def check_newline(lines, current_line, current_index, counter):
     while current_line.endswith("\\"):
@@ -39,6 +42,105 @@ def prev_nonempty_line(lines, current_index):
     while j >= 0 and not lines[j].strip():
         j -= 1
     return lines[j] if j >= 0 else ""
+
+def strip_comment(line):
+    # remove a trailing ; comment, ignoring ; inside string literals
+    in_string = False
+    for k, char in enumerate(line):
+        if char == '"':
+            in_string = not in_string
+        elif char == ";" and not in_string:
+            return line[:k].rstrip()
+    return line
+
+def opcode_args(line):
+    # text between the first "(" and its matching ")"
+    start = line.find("(")
+    if start == -1:
+        return None
+    depth = 0
+    for k in range(start, len(line)):
+        if line[k] == "(":
+            depth += 1
+        elif line[k] == ")":
+            depth -= 1
+            if depth == 0:
+                return line[start + 1:k]
+    return line[start + 1:]
+
+def split_args(args):
+    # split on commas outside (), {} and strings; [ ] of optional args stay on the tokens
+    parts = []
+    depth = 0
+    in_string = False
+    current = ""
+    for char in args:
+        if char == '"':
+            in_string = not in_string
+        elif not in_string and char in "({":
+            depth += 1
+        elif not in_string and char in ")}":
+            depth -= 1
+        if char == "," and depth == 0 and not in_string:
+            parts.append(current)
+            current = ""
+        else:
+            current += char
+    parts.append(current)
+    return parts
+
+def split_optional_marks(token):
+    # "kValue [" -> ("", "kValue", "["), "[id:i]" -> ("[", "id:i", "]"); array [] stays in the core
+    core = token.strip()
+    lead = ""
+    trail = ""
+    while core.startswith("["):
+        lead += "["
+        core = core[1:].strip()
+    while True:
+        core = core.rstrip()
+        if core.endswith("["):
+            trail = "[" + trail
+            core = core[:-1]
+        elif core.endswith("]") and core.count("]") > core.count("["):
+            trail = "]" + trail
+            core = core[:-1]
+        else:
+            break
+    return lead, core, trail
+
+def first_arg_rest(line):
+    # first argument name without its rate prefix, e.g. "amp" for "xamp"
+    args = opcode_args(line)
+    if args is None:
+        return None
+    name = re.match(r'[\s\[]*([A-Za-z0-9_"]*)', args).group(1)
+    return name[1:]
+
+def merge_typed_args(variants):
+    # merge "name:type" args position by position, e.g. val:S + val:k -> val:{S, k}
+    base = [split_optional_marks(part) for part in split_args(opcode_args(variants[0]))]
+    names = [core.split(":")[0] for _, core, _ in base]
+    types = [[core.split(":", 1)[1]] if ":" in core else [] for _, core, _ in base]
+    for variant in variants[1:]:
+        args = opcode_args(variant)
+        if args is None:
+            continue
+        parts = [split_optional_marks(part)[1] for part in split_args(args)]
+        if [core.split(":")[0] for core in parts] != names:
+            continue
+        for k, core in enumerate(parts):
+            if ":" in core:
+                t = core.split(":", 1)[1]
+                if t not in types[k]:
+                    types[k].append(t)
+    merged = []
+    for (lead, core, trail), name, t in zip(base, names, types):
+        if len(t) > 1:
+            core = f"{name}:{{{', '.join(sorted(t))}}}"
+        core = re.sub(r"\{[^{}]*\}", lambda m: re.sub(r",\s*", ", ", m.group(0)), core)
+        merged.append(f"{lead}{core}{trail.replace('[', ' [')}")
+    return ", ".join(merged)
 
 def parse_opcode_types(current_line):
     tsplit_equal = current_line.split("=")
@@ -202,7 +304,10 @@ def main() -> None:
                             opcodes_dict[opnames]["body"] = opnames
 
                             op_index_name = opcode.split(".")[0]
-                            opcode_indexes[op_index_name] = f"{TEMPLATE_OPCODE_ADDRESS}{op_index_name}/"
+                            if CABBAGE_CATEGORY_FLAG in opmd:
+                                opcode_indexes[op_index_name] = f"{TEMPLATE_CABBAGE_OPCODE_ADDRESS}{op_index_name.lower()}/"
+                            else:
+                                opcode_indexes[op_index_name] = f"{TEMPLATE_OPCODE_ADDRESS}{op_index_name}/"
 
                     if line.strip().lower().startswith("same as"):
                         find_ref = re.findall(r'\[(\w+)\]', line)
@@ -231,31 +336,40 @@ def main() -> None:
                         opcodes_dict[opnames]["description"] = escape_dollar(prefix=description)
                     if line.startswith(MODERN_FLAG):
                         if prev_nonempty_line(lines, i).strip().startswith(SYNTAX_FLAG):
+                            syntax_lines = [strip_comment(l) for l in lines]
                             j = i + 1
-                            condition = not lines[j].strip().startswith(ORC_NOSPACE_FLAG) and not lines[j].strip().startswith(ORC_SPACE_FLAG)
-                            while j < len(lines) and condition:
+                            condition = not syntax_lines[j].strip().startswith(ORC_NOSPACE_FLAG) and not syntax_lines[j].strip().startswith(ORC_SPACE_FLAG)
+                            while j < len(syntax_lines) and condition:
                                 j += 1
                             index = j + 1
-                            current_line = lines[index]
+                            current_line = syntax_lines[index]
                             # print(current_line)
                             types = set()
+                            variants = []
                             count_line = 0
                             return_body = ""
                             while current_line.strip() != "```":
                                 check_line = current_line.strip()
                                 count_line += 1
                                 if not (len(check_line) == 1 and check_line == ")"):
-                                    return_body, count_line = check_newline(lines, current_line, index, count_line)
-                                    optypes = parse_opcode_types(current_line)
-                                    types.add(optypes)
+                                    return_body, count_line = check_newline(syntax_lines, current_line, index, count_line)
+                                    variants.append(return_body)
+                                    # merge rate prefixes only for the same first argument (xamp/kamp, not SChannel/kTrig)
+                                    if first_arg_rest(return_body) == first_arg_rest(variants[0]):
+                                        optypes = parse_opcode_types(current_line)
+                                        types.add(optypes)
                                     # print(types)
-                                current_line = lines[index + count_line]
+                                current_line = syntax_lines[index + count_line]
                             if len(types) > 1:
                                 types.discard("[")
                                 types.discard('"')
-                            opcode_body = parse_opcode_body(lines, return_body, index)
+                            opcode_body = parse_opcode_body(syntax_lines, return_body, index)
                             types.discard("")
-                            if len(opcode_body) > 1:
+                            first_args = opcode_args(variants[0]) if variants else None
+                            if first_args is not None and regex_typed.search(first_args):
+                                body = f"{opnames}({merge_typed_args(variants)})"
+                                opcodes_dict[opnames]["prefix"] = escape_dollar(prefix=body)
+                            elif len(opcode_body) > 1:
                                 types = format_types(types)
                                 # print("types format: ", types)
                                 # print("op body format: ", types)

@@ -14,6 +14,11 @@
         "body": "vmultvi",
         "description": "Performs mutiplication between two vectorial control signals at init time."
     },
+    "cabbageJsonSet": {
+        "prefix": "cabbageJsonSet(json:S, path:S, val:{S, k})",
+        "body": "cabbageJsonSet",
+        "description": "This opcode returns a new JSON document with the value at a dot-notation path replaced (`nodes.0.params.rate`, where numeric segments index arrays). Intermediate objects are created as needed. Array elements can be replaced by index; setting out of range, or through a type clash, leaves the output empty and logs a warning. Query the result with [cabbageJsonGet]."
+    },
     "fmbell": {
         "prefix": "fmbell(kamp, kfreq, kc1, kc2, kvdepth, kvrate [, ifn1, ifn2, ifn3, ifn4, ivfn, isus])",
         "body": "fmbell",
@@ -123,6 +128,11 @@
         "prefix": "mixersetleveli(isend, ibuss, igain)",
         "body": "mixersetleveli",
         "description": "Sets the level at which signals from the send are added to the buss."
+    },
+    "cabbageSetValue": {
+        "prefix": "cabbageSetValue(SChannel, kValue [, kTrigger])",
+        "body": "cabbageSetValue",
+        "description": "This opcode sets the current value of a widget and can be executed at either init-time or k-time. When called, it immediately writes the incoming value to a Csound channel and also places the value into a FIFO queue, which the frontend reads to update the UI."
     },
     "ftresizei": {
         "prefix": "ftresizei(ifn, isize)",
@@ -254,6 +264,11 @@
         "body": "modmatrix",
         "description": "Modulation matrix opcode with optimizations for sparse matrices."
     },
+    "cabbageCreate": {
+        "prefix": "cabbageCreate(SJson)",
+        "body": "cabbageCreate",
+        "description": "This opcode will create a new widget based on a JSON object. Note that widgets generated in this way cannot be registered as parameters. This means they cannot be automated by the host. Note this opcode only runs at i-time."
+    },
     "ampmidicurve": {
         "prefix": "ampmidicurve({i, k}velocity, idynamicrange, iexponent)",
         "body": "ampmidicurve",
@@ -370,7 +385,7 @@
         "description": "Fast scanned synthesis waveform and the wavetable generator."
     },
     "strtod": {
-        "prefix": "strtod({S, i}str)",
+        "prefix": "strtod(Sstr)",
         "body": "strtod",
         "description": "Converts a string to a floating point value (i-rate)."
     },
@@ -408,6 +423,11 @@
         "prefix": "pvsbandp(fsigin, xlowcut, xlowfull, xhighfull, xhighcut [, ktype])",
         "body": "pvsbandp",
         "description": "A band pass filter working in the spectral domain."
+    },
+    "cabbageAraGetUpdate": {
+        "prefix": "cabbageAraGetUpdate()",
+        "body": "cabbageAraGetUpdate",
+        "description": "Returns a trigger that is `1` for a single k-cycle whenever ARA model data changes."
     },
     "jsonunmarshalfile": {
         "prefix": "jsonunmarshalfile(Spath [, iflags [, imaxdepth]])",
@@ -615,7 +635,7 @@
         "description": "Generates a natural-sounding user-controllable vibrato."
     },
     "rifft": {
-        "prefix": "rifft({in:Complex[], in:k[]})",
+        "prefix": "rifft(in:{Complex[], k[]})",
         "body": "rifft",
         "description": "Complex-to-real Inverse Fast Fourier Transform."
     },
@@ -740,7 +760,7 @@
         "description": "Semi-physical model of a cabasa sound."
     },
     "dbap": {
-        "prefix": "dbap({sig:a, mode:i, src:k[], ldim:i, lpos:i, sprd:k, rloff:i [, wgts:i[]], sig:a, mode:i, src:k[], lpos:i[][], sprd:k, rloff:i [, wgts:i[]]})",
+        "prefix": "dbap(sig:a, mode:i, src:k[], lpos:i[][], sprd:k, rloff:i [, wgts:i[]])",
         "body": "dbap",
         "description": "Distance-Based Amplitude Panning for arbitrary 2D and 3D loudspeaker layouts."
     },
@@ -894,6 +914,11 @@
         "body": "expsegr",
         "description": "Trace a series of exponential segments between specified points including a release segment."
     },
+    "cabbageJsonHas": {
+        "prefix": "cabbageJsonHas(json:S, path:S)",
+        "body": "cabbageJsonHas",
+        "description": "This opcode checks whether a dot-notation path exists in a JSON document (`nodes.0.params.rate`, where numeric segments index arrays). Unlike a query that returns an empty value, it distinguishes \u201cmissing\u201d from \u201cpresent but null/zero\u201d. See also [cabbageJsonType]."
+    },
     "pvstanal": {
         "prefix": "pvstanal(ktimescal, kamp, kpitch, ktab, [kdetect, kwrap, ioffset, ifftsize, ihop, idbthresh])",
         "body": "pvstanal",
@@ -960,7 +985,7 @@
         "description": "Multitap delay line implementation."
     },
     "mp3nchnls": {
-        "prefix": "mp3nchnls({S, i}filename)",
+        "prefix": "mp3nchnls(Sfilename)",
         "body": "mp3nchnls",
         "description": "Returns the number of channels encoded in an MP3 file."
     },
@@ -1180,7 +1205,7 @@
         "description": "Converts a i-rate parameter to an k-rate value or an a-rate value to a k-rate value by down-sampling."
     },
     "jsonmarshal": {
-        "prefix": "jsonmarshal({value:Type [, ipretty [, imaxdepth]], values:T[] [, ipretty [, imaxdepth]]})",
+        "prefix": "jsonmarshal(value:Type [, ipretty [, imaxdepth]])",
         "body": "jsonmarshal",
         "description": "Converts a user-defined type or a one-dimensional typed array to JSON text."
     },
@@ -1395,7 +1420,7 @@
         "description": "Returns the playback status of MIDI file input."
     },
     "mp3bitrate": {
-        "prefix": "mp3bitrate({S, i}filename)",
+        "prefix": "mp3bitrate(Sfilename)",
         "body": "mp3bitrate",
         "description": "Returns the reported bit rate of an MP3 file in kilobits per second."
     },
@@ -1488,6 +1513,11 @@
         "prefix": "lphasor(xtrns [, ilps] [, ilpe] [, imode] [, istrt] [, istor])",
         "body": "lphasor",
         "description": "Generates a table index for sample playback (e.g. with [tablexkt])."
+    },
+    "cabbageJsonGet": {
+        "prefix": "cabbageJsonGet(json:S, path:S)",
+        "body": "cabbageJsonGet",
+        "description": "This opcode queries a JSON document using dot-notation paths (`nodes.0.params.rate`, where numeric segments index arrays). The output variable determines the expected type: assign to a string, number, or array and the matching overload runs. Invalid documents, missing paths, and type mismatches degrade gracefully to empty/zero values \u2014 use [cabbageJsonType] when the distinction matters."
     },
     "\\$NAME": {
         "prefix": "\\$NAME",
@@ -1814,6 +1844,11 @@
         "body": "scale",
         "description": "Arbitrary signal scaling."
     },
+    "cabbageAraDump": {
+        "prefix": "cabbageAraDump()",
+        "body": "cabbageAraDump",
+        "description": "Prints a formatted dump of the entire ARA data pool to the Csound output. Useful for debugging and understanding the state of the ARA document model. Supports two output modes: detailed property dump and ASCII timeline view."
+    },
     "hrtfreverb": {
         "prefix": "hrtfreverb(asrc, ilowrt60, ihighrt60, ifilel, ifiler [,isr, imfp, iorder])",
         "body": "hrtfreverb",
@@ -1904,6 +1939,11 @@
         "body": "sumarray",
         "description": "Returns the sum of all elements in a numeric array."
     },
+    "cabbageGetWidgets": {
+        "prefix": "cabbageGetWidgets()",
+        "body": "cabbageGetWidgets",
+        "description": "Returns a string array containing the IDs of all widgets currently loaded in the instrument. This opcode works at i-time only. Each entry in the returned array corresponds to a widget\u2019s top-level `id` field, or falls back to `channels[0].id` if no top-level `id` is present. This opcodes runs at i-time only."
+    },
     "xout": {
         "prefix": "xout(xoutarg1 [, xoutarg2] ... [, xoutargN])",
         "body": "xout",
@@ -1930,7 +1970,7 @@
         "description": "Extracts an integer from a decimal number."
     },
     "strtodk": {
-        "prefix": "strtodk({S, k}str)",
+        "prefix": "strtodk(Sstr)",
         "body": "strtodk",
         "description": "Converts a string to a floating point value at i- or k-rate."
     },
@@ -1995,7 +2035,7 @@
         "description": "Removes all matching queued note events."
     },
     "midifilepos": {
-        "prefix": "midifilepos({[id:i], [id:k], pos:i [, id:i], pos:k [, id:k]})",
+        "prefix": "midifilepos([id:{i, k}])",
         "body": "midifilepos",
         "description": "Gets/Sets the playback position of a MIDI file. "
     },
@@ -2049,6 +2089,11 @@
         "body": "sense",
         "description": "Returns the ASCII code of a key that has been pressed, or -1 if no key has been pressed."
     },
+    "cabbageGetValue": {
+        "prefix": "cabbageGetValue(SChannel)",
+        "body": "cabbageGetValue",
+        "description": "This opcode queries the current value of a widget. It can run at init-time or k-time and includes an optional output argument that triggers a value of 1 for one k-cycle whenever the widget value is updated or changed. The value and trigger can either be returned as two separate variables, or as a single [built-in trigger struct](https://cabbageaudio.com/docs/using/csound7/#built-in-trigger-structs) variable."
+    },
     "compilestr": {
         "prefix": "compilestr(Sorch)",
         "body": "compilestr",
@@ -2075,7 +2120,7 @@
         "description": "A physical model of a bowed bar."
     },
     "pvs2array": {
-        "prefix": "pvs2array({k, t}var|kvar[], fsig)",
+        "prefix": "pvs2array(tvar|kvar[], fsig)",
         "body": "pvs2array",
         "description": "Copies spectral data to k-rate arrays (or t-variables). Also known as [pvs2array](pvs2array.md)."
     },
@@ -2190,7 +2235,7 @@
         "description": "Writes 32-channel audio data to an external device or stream."
     },
     "active": {
-        "prefix": "active({S, i, k}nsnum [,iopt [,inorel]])",
+        "prefix": "active(insnum [,iopt [,inorel]])",
         "body": "active",
         "description": "Returns the number of active instances of an instrument with options to ignore releasing instances."
     },
@@ -2225,7 +2270,7 @@
         "description": "Resynthesize using a fast oscillator-bank."
     },
     "dbapgains": {
-        "prefix": "dbapgains({mode:i, src:k[], lpos:i, sprd:k, rloff:i, ldim:i [, wgts:i], mode:i, src:k[], lpos:i[][], sprd:k, rloff:i [, wgts:i[]]})",
+        "prefix": "dbapgains(mode:i, src:k[], lpos:i[][], sprd:k, rloff:i [, wgts:i[]])",
         "body": "dbapgains",
         "description": "Distance-Based Amplitude Panning gain vector generator."
     },
@@ -2339,6 +2384,11 @@
         "body": "trmix",
         "description": "Streaming partial track mixing."
     },
+    "cabbageGet": {
+        "prefix": "cabbageGet(SChannel, SProperty)",
+        "body": "cabbageGet",
+        "description": "This opcode queries the current value of a widget property, i.e,`colour`, `bounds.top`, `height`, etc. It can run at init-time or k-time and includes an optional output argument that triggers a value of 1 for one k-cycle whenever the widget value is updated or changed. String results can also be returned as a single [built-in trigger struct](https://cabbageaudio.com/docs/using/csound7/#built-in-trigger-structs) variable."
+    },
     "hvs2": {
         "prefix": "hvs2(kx, ky, inumParms, inumPointsX, inumPointsY, iOutTab, iPositionsTab, iSnapTab [, iConfigTab])",
         "body": "hvs2",
@@ -2365,17 +2415,17 @@
         "description": "Returns the Csound type of a variable or expression as a string."
     },
     "pvs2tab": {
-        "prefix": "pvs2tab({k, t}var|kvar[], fsig)",
+        "prefix": "pvs2tab(tvar|kvar[], fsig)",
         "body": "pvs2tab",
         "description": "Copies spectral data to k-rate arrays (or t-variables). Also known as [pvs2array](pvs2array.md)."
     },
     "cpuprc": {
-        "prefix": "cpuprc({S, i}nsnum, ipercent)",
+        "prefix": "cpuprc(insnum, ipercent)",
         "body": "cpuprc",
         "description": "Control allocation of cpu resources on a per-instrument basis, to optimize realtime output."
     },
     "lpcanal": {
-        "prefix": "lpcanal({a, i, k}src, kflg, kprd, isiz, iord [, iwin])",
+        "prefix": "lpcanal(asrc, kflg, kprd, isiz, iord [, iwin])",
         "body": "lpcanal",
         "description": "Streaming linear prediction analysis."
     },
@@ -2428,6 +2478,11 @@
         "prefix": "vlimit(ifn, kmin, kmax, ielements)",
         "body": "vlimit",
         "description": "Limits elements of vectorial control signals."
+    },
+    "cabbageAraGetStateJson": {
+        "prefix": "cabbageAraGetStateJson()",
+        "body": "cabbageAraGetStateJson",
+        "description": "Returns the complete ARA data pool as a JSON string. Useful for passing ARA state directly to a web frontend or other JSON consumers."
     },
     "arduinostart": {
         "prefix": "arduinostart(SPortName [, ibaudRate])",
@@ -2585,7 +2640,7 @@
         "description": "Adds edges from one node to several possible targets."
     },
     "changed2": {
-        "prefix": "changed2({a, k}var1 [, kvar2,..., kvarN])",
+        "prefix": "changed2(kvar1 [, kvar2,..., kvarN])",
         "body": "changed2",
         "description": "k-rate signal change detector."
     },
@@ -2715,7 +2770,7 @@
         "description": "Calculates the dot product of two arrays."
     },
     "sum": {
-        "prefix": "sum({a, i, k}sig1 [, asig2] [, asig3] [...])",
+        "prefix": "sum(asig1 [, asig2] [, asig3] [...])",
         "body": "sum",
         "description": "Sums any number of a-rate signals, or array elements."
     },
@@ -2759,13 +2814,23 @@
         "body": "midifileplay",
         "description": "Starts playback of a MIDI file. "
     },
+    "cabbageLoadState": {
+        "prefix": "cabbageLoadState(SFilePath)",
+        "body": "cabbageLoadState",
+        "description": "This opcode loads widget values from a previously saved JSON state file created by the `cabbageSaveState` opcode. All matching widget channels will be updated with their saved values. Unlike Cabbage 2, all widget state is saved and restored, not only the current parameter values. This opcode works at i-time only. Therefore it\u2019s best used in an instrument that is called when you want to load state."
+    },
     "directory": {
         "prefix": "directory(SDirectory [, SExtention])",
         "body": "directory",
         "description": "Reads a directory and outputs to a string array a list of file names."
     },
+    "cabbageSet": {
+        "prefix": "cabbageSet(SChannel, SProperty, iValue)",
+        "body": "cabbageSet",
+        "description": "This opcode sets a widget property, i.e,`colour.fill`, `visible`, `opacity`, etc. It can run at init-time or k-time. The k-time variant must use a trigger to initiate the update (see below)."
+    },
     "ftaudio": {
-        "prefix": "ftaudio({i, k}fn, \"filename\", iformat [, ibeg, iend])",
+        "prefix": "ftaudio(ifn, \"filename\", iformat [, ibeg, iend])",
         "body": "ftaudio",
         "description": "Write a previously-allocated table to an audio file in a variety of formats."
     },
@@ -2810,12 +2875,12 @@
         "description": "Savitzky-Golay smoothing and differentiation filter."
     },
     "schedule": {
-        "prefix": "schedule({d, i}nsnum, iwhen, idur [, ip4] [, ip5] [...])",
+        "prefix": "schedule(insnum, iwhen, idur [, ip4] [, ip5] [...])",
         "body": "schedule",
         "description": "Adds a new score event."
     },
     "fft": {
-        "prefix": "fft({in:Complex[], in:Complex[] [, inverse:i], in:k[]})",
+        "prefix": "fft(in:{Complex[], k[]})",
         "body": "fft",
         "description": "Complex-to-complex Fast Fourier Transform."
     },
@@ -2894,6 +2959,11 @@
         "body": "pdclip",
         "description": "Performs linear clipping on an audio signal or a phasor."
     },
+    "cabbageHasKey": {
+        "prefix": "cabbageHasKey(SChannel, SProperty)",
+        "body": "cabbageHasKey",
+        "description": "This opcode checks whether a named widget has a given property key. It supports dot-notation for nested JSON properties (e.g., `\"bounds.left\"`). Returns 1 if the key exists, 0 otherwise. It can run at init-time or k-time."
+    },
     "shiftin": {
         "prefix": "shiftin(asig)",
         "body": "shiftin",
@@ -2935,7 +3005,7 @@
         "description": "Get the note number, in octave-point-decimal units, of the current MIDI event."
     },
     "opcodeinfo": {
-        "prefix": "opcodeinfo({obj:Opcode, opc:OpcodeDef})",
+        "prefix": "opcodeinfo(opc:OpcodeDef)",
         "body": "opcodeinfo",
         "description": "Prints information on an opcode definition and its overloads."
     },
@@ -3050,7 +3120,7 @@
         "description": "Distributes an audio signal among 8 channels."
     },
     "maxalloc": {
-        "prefix": "maxalloc({S, i}nsnum, icount)",
+        "prefix": "maxalloc(insnum, icount)",
         "body": "maxalloc",
         "description": "Limits the number of allocations of an instrument."
     },
@@ -3098,6 +3168,11 @@
         "prefix": "linrand(krange)",
         "body": "linrand",
         "description": "Linear distribution random number generator (positive values only)."
+    },
+    "cabbageCreateFileName": {
+        "prefix": "cabbageCreateFileName(SDirectory, SExtension)",
+        "body": "cabbageCreateFileName",
+        "description": "Generates a likely-unique filename in a target directory using the requested extension. This opcode is useful when you need a valid and unique filename for testing. The opcode returns a full path (forward slashes) but does not create the file on disk. This opcode is i-time only, so it\u2019s best used in a dedicated instrument that will generate the filename when needed."
     },
     "rspline": {
         "prefix": "rspline({k, x}rangeMin, xrangeMax, kcpsMin, kcpsMax)",
@@ -3225,7 +3300,7 @@
         "description": "Determines the root-mean-square amplitude of an audio signal."
     },
     "midifilein": {
-        "prefix": "midifilein({index:i [, id:i], index:k [, id:i]})",
+        "prefix": "midifilein(index:{i, k} [, id:i])",
         "body": "midifilein",
         "description": "Returns a generic MIDI message from a MIDI file."
     },
@@ -3460,7 +3535,7 @@
         "description": "Reverberates an input signal with a \u201cnatural room\u201d frequency response."
     },
     "init": {
-        "prefix": "init({a, inst:Instr [, p4:i, ...], m, op:Opcode [, arg1:*, ...], size1:i [, size2:i, ...], source:T[], source:Type})",
+        "prefix": "init(arg:{i, S} [, ...])",
         "body": "init",
         "description": "Initializes variables, arrays, user-defined structs and object instances."
     },
@@ -3549,6 +3624,11 @@
         "body": "cntstate",
         "description": "Gives the range and increment of a counter."
     },
+    "cabbageAraGet": {
+        "prefix": "cabbageAraGet(SProperty)",
+        "body": "cabbageAraGet",
+        "description": "Returns metadata about ARA audio sources, region information, and plugin state from a consolidated JSON data store. Available in numeric and string variants."
+    },
     "dssilist": {
         "prefix": "dssilist()",
         "body": "dssilist",
@@ -3613,6 +3693,11 @@
         "prefix": "sumtab(kArray[])",
         "body": "sumtab",
         "description": "Returns the sum of a k-rate array."
+    },
+    "cabbageAraGetUpdateEvent": {
+        "prefix": "cabbageAraGetUpdateEvent()",
+        "body": "cabbageAraGetUpdateEvent",
+        "description": "Returns the type of the most recent ARA lifecycle event together with a trigger that is `1` for a single k-cycle whenever the ARA model data changes."
     },
     "tabw": {
         "prefix": "tabw({a, k}sig, kndx, ifn [,ixmode])",
@@ -3710,7 +3795,7 @@
         "description": "An interpolating variable time delay."
     },
     "strtolk": {
-        "prefix": "strtolk({S, k}str)",
+        "prefix": "strtolk(Sstr)",
         "body": "strtolk",
         "description": "Converts a string to a signed integer value at i- or k-rate."
     },
@@ -3929,6 +4014,11 @@
         "body": "flanger",
         "description": "A user controlled flanger."
     },
+    "cabbageJsonLen": {
+        "prefix": "cabbageJsonLen(json:S, path:S)",
+        "body": "cabbageJsonLen",
+        "description": "This opcode returns the size of the value at a dot-notation path in a JSON document: array length or object key count. Missing paths, scalars, and invalid documents yield `0`. See also [cabbageJsonGet]."
+    },
     "scorelinei": {
         "prefix": "scorelinei(Sin)",
         "body": "scorelinei",
@@ -3990,7 +4080,7 @@
         "description": "Compiles a new orchestra from an ASCII file."
     },
     "tb": {
-        "prefix": "tb({i, k}fn)",
+        "prefix": "tb(ifn)",
         "body": "tb",
         "description": "Table Read Access inside expressions."
     },
@@ -4224,6 +4314,11 @@
         "body": "locsig",
         "description": "Takes an input signal and distributes between 2 or 4 channels."
     },
+    "cabbageJsonType": {
+        "prefix": "cabbageJsonType(json:S, path:S)",
+        "body": "cabbageJsonType",
+        "description": "This opcode reports the JSON type of the value at a dot-notation path, so the orchestra can branch before querying. It is the typesafe companion to [cabbageJsonGet]: use it when an empty string or zero is ambiguous (missing vs. present-but-empty, `\"123\"` vs. `123`)."
+    },
     "svfilter": {
         "prefix": "svfilter(asig, kcf, kq [, iscl] [, iskip])",
         "body": "svfilter",
@@ -4380,12 +4475,12 @@
         "description": "A high-pass Butterworth filter."
     },
     "strtol": {
-        "prefix": "strtol({S, i}str)",
+        "prefix": "strtol(Sstr)",
         "body": "strtol",
         "description": "Converts a string to a signed integer value (i-rate)."
     },
     "create": {
-        "prefix": "create({code:S, instr:InstrDef, opc:OpcodeDef, len:i [, overload:i], opc:OpcodeDef [, overload:i]})",
+        "prefix": "create(code:S)",
         "body": "create",
         "description": "Creates a new instrument definition, instrument instance, or opcode object."
     },
@@ -4393,6 +4488,11 @@
         "prefix": "#define NAME # replacement text #",
         "body": "#define",
         "description": "Defines a macro."
+    },
+    "cabbageGetFiles": {
+        "prefix": "cabbageGetFiles(SDirectory, SFileType)",
+        "body": "cabbageGetFiles",
+        "description": "Returns a list of files in a directory optionally filtered by extension. Useful for populating file lists for widgets (e.g., comboboxes) or for scanning resource folders. This opcode works at i-time only. Therefore it is best used in an instrument that is called when the files are needed."
     },
     "atsread": {
         "prefix": "atsread(ktimepnt, iatsfile, ipartial)",
@@ -4529,6 +4629,11 @@
         "body": "arduinoread",
         "description": "Read integer data from an arduino port using the Csound-Arduino protocol."
     },
+    "cabbageDump": {
+        "prefix": "cabbageDump(SChannel, iIndent)",
+        "body": "cabbageDump",
+        "description": "This opcode will print the JSON representation of a widget to the Csound console. This can be useful for debugging widgets."
+    },
     "mandol": {
         "prefix": "mandol(kamp, kfreq, kpluck, kdetune, kgain, ksize [, ifn] [, iminfreq])",
         "body": "mandol",
@@ -4625,7 +4730,7 @@
         "description": "Read signals from a file at i-rate."
     },
     "perf": {
-        "prefix": "perf({ins:Instr [, p4:k, ...], opc:Opcode [, arg1:*, ...]})",
+        "prefix": "perf(ins:Instr [, p4:k, ...])",
         "body": "perf",
         "description": "Execute a performance pass on an instrument or opcode."
     },
@@ -4660,7 +4765,7 @@
         "description": "Writes stereo audio data to an external device or stream."
     },
     "ficlose": {
-        "prefix": "ficlose({S, i}handle)",
+        "prefix": "ficlose(ihandle)",
         "body": "ficlose",
         "description": "Closes a previously opened file."
     },
@@ -4750,7 +4855,7 @@
         "description": "Generate control signal consisting of exponential or linear segments delimited by two or more specified points."
     },
     "remap": {
-        "prefix": "remap({x:a, xdata[], ydata[], mode:i, bounds:i [, fill:i], x:k, xdata[], ydata[], mode:i, bounds:i [, fill:i], x:k[], xdata[], ydata[], mode:i, bounds:i [, fill:i]})",
+        "prefix": "remap(x:{a, k, k[]}, xdata[], ydata[], mode:i, bounds:i [, fill:i])",
         "body": "remap",
         "description": "Maps a value through a curve defined by a table of breakpoints."
     },
@@ -4760,7 +4865,7 @@
         "description": "Returns the minimum value in a numeric array and optionally its index."
     },
     "delete": {
-        "prefix": "delete({d, e, i, o}nstance)",
+        "prefix": "delete(instance)",
         "body": "delete",
         "description": "Cleans up an object when the containing instrument ends."
     },
@@ -4860,7 +4965,7 @@
         "description": "Generate a vector (one-dimensional k-rate array) with a sequence of"
     },
     "midifileloop": {
-        "prefix": "midifileloop({loop:i [, id:i], loop:k [, id:k]})",
+        "prefix": "midifileloop(loop:{i, k} [, id:{i, k}])",
         "body": "midifileloop",
         "description": "Sets the looping mode of a MIDI file playback. "
     },
@@ -5229,6 +5334,11 @@
         "body": "tabwi",
         "description": "Fast table opcodes."
     },
+    "cabbageSaveState": {
+        "prefix": "cabbageSaveState(SFilePath)",
+        "body": "cabbageSaveState",
+        "description": "This opcode saves the current state of all widget values to a JSON file. The saved state can later be restored using the `cabbageLoadState` opcode. This is useful for creating preset systems or saving/loading configurations. This opcode works at i-time only. Therefore it is best used in an instrument that is called when you want to save state."
+    },
     "stmnext": {
         "prefix": "stmnext(irunner, Snode)",
         "body": "stmnext",
@@ -5350,7 +5460,7 @@
         "description": "Returns the real part of a complex number."
     },
     "sockrecv": {
-        "prefix": "sockrecv({S, i}port, ilength)",
+        "prefix": "sockrecv(iport, ilength)",
         "body": "sockrecv",
         "description": "Receives data from other processes using the low-level UDP or TCP protocols."
     },
@@ -5435,7 +5545,7 @@
         "description": "A fractal noise generator."
     },
     "mp3sr": {
-        "prefix": "mp3sr({S, i}filename)",
+        "prefix": "mp3sr(Sfilename)",
         "body": "mp3sr",
         "description": "Returns the sample rate encoded in an MP3 file, in Hz."
     },
@@ -5760,7 +5870,7 @@
         "description": "Constructs a user-definable envelope with extended release segment."
     },
     "gtadsr": {
-        "prefix": "gtadsr({a, k}sig, katt, kdec, ksus, krel, kgate)",
+        "prefix": "gtadsr(asig, katt, kdec, ksus, krel, kgate)",
         "body": "gtadsr",
         "description": "A gated linear attack-decay-sustain with exponential release."
     },
@@ -6030,7 +6140,7 @@
         "description": "Reads the last program number received on a MIDI channel."
     },
     "deconv": {
-        "prefix": "deconv({in1:i[], in2:i[], in1:k[], in2:k[]})",
+        "prefix": "deconv(in1:{i[], k[]}, in2:{i[], k[]})",
         "body": "deconv",
         "description": "Inverse convolution of one array by another using the fast Fourier"
     },
@@ -6154,6 +6264,11 @@
         "body": "ctrl14",
         "description": "Allows a floating-point 14-bit MIDI signal scaled with a minimum and a maximum range."
     },
+    "cabbageSendMessage": {
+        "prefix": "cabbageSendMessage(SJsonString)",
+        "body": "cabbageSendMessage",
+        "description": "This opcode sends arbitrary JSON data directly to the frontend, allowing you to create custom messages for specialized UI interactions or data visualization. Unlike other Cabbage opcodes that update specific widget properties, `cabbageSendMessage` gives you complete control over the message format and content."
+    },
     "fof": {
         "prefix": "fof(xamp, xfund, xform, koct, kband, kris, kdur, kdec, iolaps, ifna, ifnb, itotdur [, iphs] [, ifmode] [, iskip])",
         "body": "fof",
@@ -6210,7 +6325,7 @@
         "description": "Stores a bank of 64 different MIDI control messages to a table."
     },
     "midifiletempo": {
-        "prefix": "midifiletempo({tempo:i [, id:i], tempo:k [, id:k]})",
+        "prefix": "midifiletempo(tempo:{i, k} [, id:{i, k}])",
         "body": "midifiletempo",
         "description": "Sets the playback tempo of a MIDI file. "
     },
@@ -6274,6 +6389,11 @@
         "body": "outkpb",
         "description": "Sends MIDI pitch-bend messages at k-rate."
     },
+    "cabbageAraGetSourceSamples": {
+        "prefix": "cabbageAraGetSourceSamples({a, k}Pos, iChan, iSourceIndex)",
+        "body": "cabbageAraGetSourceSamples",
+        "description": "Reads PCM audio data from an ARA source. Available in four variants: a-rate (audio output), k-rate (k-rate output), k-array, and i-array."
+    },
     "vdelay3": {
         "prefix": "vdelay3(asig, adel, imaxdel [, iskip])",
         "body": "vdelay3",
@@ -6330,7 +6450,7 @@
         "description": "Accumulates the maximum of the absolute values of audio signals."
     },
     "turnoff2": {
-        "prefix": "turnoff2({i, k}insno, kmode, krelease)",
+        "prefix": "turnoff2(kinsno, kmode, krelease)",
         "body": "turnoff2",
         "description": "Turn off instance(s) of other instruments at performance time."
     },
@@ -6390,7 +6510,7 @@
         "description": "Returns the loop segment start-time of a stored function table number."
     },
     "turnoff": {
-        "prefix": "turnoff({i, k, v})",
+        "prefix": "turnoff()",
         "body": "turnoff",
         "description": "Enables an instrument to turn itself off or to turn an instance of another instrument off."
     },
@@ -6505,7 +6625,7 @@
         "description": "Calculate the spectral centroid of an audio signal on a given trigger."
     },
     "remove": {
-        "prefix": "remove({d, i}nsnum)",
+        "prefix": "remove(insnum)",
         "body": "remove",
         "description": "Removes the definition of an instrument as long as it is not in use."
     },
@@ -6545,7 +6665,7 @@
         "description": "Activates the indicated instrument in the orchestra header, without need for an i statement."
     },
     "nstrnum": {
-        "prefix": "nstrnum(dname\")",
+        "prefix": "nstrnum(\"name\")",
         "body": "nstrnum",
         "description": "Returns an instrument number from a name or definition."
     },
@@ -6725,7 +6845,7 @@
         "description": "Generates random impulses from 0 to 1."
     },
     "readks": {
-        "prefix": "readks({S, i}filename, iprd)",
+        "prefix": "readks(Sfilename, iprd)",
         "body": "readks",
         "description": "Reads strings from a text file at regular intervals during performance."
     },
@@ -6925,7 +7045,7 @@
         "description": "Sends a stream of the MIDI notes."
     },
     "instrnum": {
-        "prefix": "instrnum({S, d}name)",
+        "prefix": "instrnum(Sname)",
         "body": "instrnum",
         "description": "Returns an instrument number from a name or definition."
     },
