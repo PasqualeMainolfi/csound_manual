@@ -5,7 +5,9 @@ The pages are read from src/content/docs/docs/opcodes/ in the site repository
 (https://github.com/nodro7/cabbageaudio.com), either from GitHub or from a local
 checkout. Each page becomes a docs/opcodes/<name>.md article, the examples it
 shows are copied from public/examples/ to docs/examples/ and
-docs/cabbage/cabbage.md lists the opcodes by category.
+docs/cabbage/cabbage.md lists the opcodes by category. The struct types Cabbage
+registers (e.g. CabbageNumTrig) are read from the table in using/csound7.md and
+written to parse_data_to_lsp/json_data/structs.json.
 Run parse_data_to_lsp/to_parse.py afterwards to refresh the LSP data.
 """
 
@@ -21,6 +23,9 @@ BASE = "https://cabbageaudio.com"
 REPO = "nodro7/cabbageaudio.com"
 OPCODES_DIR = "src/content/docs/docs/opcodes"
 EXAMPLES_DIR = "public/examples"
+# The page that documents the struct types Cabbage registers, and its URL on the site.
+STRUCTS_PAGE = "src/content/docs/docs/using/csound7.md"
+STRUCTS_URL = "docs/using/csound7/"
 
 # Categories must also be listed in categories.py.
 CATEGORY_ORDER = ["Widgets", "JSON", "Files and State", "ARA"]
@@ -73,6 +78,12 @@ class Source:
             }
         pages.pop("overview", None)
         return pages
+
+    def page(self, path):
+        """Return the text of one file of the site repository."""
+        if self.checkout:
+            return (self.checkout / path).read_text(encoding="utf-8")
+        return fetch(f"https://raw.githubusercontent.com/{REPO}/{self.ref}/{path}")
 
     def example(self, name):
         if self.checkout:
@@ -171,6 +182,78 @@ def convert(slug, page, names, source, examples_dir):
     return header + md + credits
 
 
+def slugify(title):
+    """The anchor Starlight gives a heading."""
+    return re.sub(r"[^\w\- ]", "", title.lower()).strip().replace(" ", "-")
+
+
+def parse_structs(page, url):
+    """Return {name: struct} from the `| Struct type | Members | ... |` table of a page.
+
+    Members are written as `name:type`. The paragraph before the table describes the
+    structs, and a list after it may name the opcodes that accept them.
+    """
+    _, body = front_matter(page)
+    lines = body.replace("\r\n", "\n").split("\n")
+    start = next((i for i, l in enumerate(lines) if re.match(r"\|\s*Struct type\s*\|\s*Members\s*\|", l.strip())), None)
+    if start is None:
+        return {}
+
+    heading = next((m.group(1).strip() for l in reversed(lines[:start]) if (m := re.match(r"#{2,6} (.*)", l))), "")
+    intro = []
+    for line in reversed(lines[:start]):
+        if not line.strip() or line.startswith("#"):
+            if intro:
+                break
+            continue
+        intro.insert(0, line.strip())
+    intro = " ".join(intro).rstrip(":")
+
+    structs = {}
+    end = start + 2  # header and separator rows
+    while end < len(lines) and lines[end].strip().startswith("|"):
+        cells = [c.strip() for c in lines[end].strip().strip("|").split("|")]
+        end += 1
+        name = cells[0].strip("`")
+        members = re.findall(r"`(\w+):([^`]+)`", cells[1]) if len(cells) > 1 else []
+        if not re.fullmatch(r"[A-Za-z_]\w*", name) or not members:
+            continue
+        use_with = cells[2] if len(cells) > 2 else ""
+        description = intro + "." if intro else ""
+        if use_with:
+            description += f" Use with {use_with}."
+        structs[name] = {
+            "members": [list(m) for m in members],
+            "description": description.strip(),
+            "opcodes": [],
+            "source": "Cabbage",
+            "doc": f"{url}#{slugify(heading)}" if heading else url,
+        }
+
+    # e.g. "- [`cabbageGet`](/docs/opcodes/cabbageget/) — `CabbageStrTrig`" or "— both types"
+    for line in lines[end:]:
+        if line.startswith("#"):
+            break
+        m = re.match(r"\s*[-*] \[`(\w+)`\]\([^)]*\)\s*[—–-]\s*(.*)", line)
+        if not m:
+            continue
+        opcode, accepts = m.groups()
+        for name, struct in structs.items():
+            if f"`{name}`" in accepts or re.search(r"\b(both|all)\b", accepts):
+                struct["opcodes"].append(opcode)
+    return structs
+
+
+def write_structs(source, path):
+    """Write the struct types Cabbage registers to the LSP data; fail if the table is gone."""
+    structs = parse_structs(source.page(STRUCTS_PAGE), f"{BASE}/{STRUCTS_URL}")
+    if not structs:
+        raise SystemExit(f"No `| Struct type | Members |` table found in {STRUCTS_PAGE}: has the page changed?")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(structs, ensure_ascii=False, indent=4) + "\n", encoding="utf-8")
+    return structs
+
+
 def write_category_page(names, path):
     by_cat = {}
     for name in sorted(names):
@@ -202,6 +285,8 @@ def main():
         print(f"{slug} -> opcodes/{names[slug]}.md ({category(names[slug])})")
     write_category_page(names.values(), docs / "cabbage" / "cabbage.md")
     print(f"Imported {len(pages)} Cabbage opcodes.")
+    structs = write_structs(source, args.root / "parse_data_to_lsp" / "json_data" / "structs.json")
+    print(f"Imported {len(structs)} Cabbage structs: {', '.join(structs)}.")
 
 
 if __name__ == "__main__":
